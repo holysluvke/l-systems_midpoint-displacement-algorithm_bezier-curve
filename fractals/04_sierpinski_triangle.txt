@@ -1,0 +1,4 @@
+# Треугольник Серпинского | iterations: 5
+FXF--FF--FF 60 0
+F -> FF
+X -> --FXF++FXF++FXF--

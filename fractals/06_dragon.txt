@@ -1,0 +1,4 @@
+# Кривая дракона | iterations: 12
+FX 90 0
+X -> X+YF+
+Y -> -FX-Y

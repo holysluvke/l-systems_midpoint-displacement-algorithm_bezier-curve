@@ -1,0 +1,4 @@
+# Кривая Пеано | iterations: 3
+X 90 0
+X -> XFYFX+F+YFXFY-F-XFYFX
+Y -> YFXFY-F-XFYFX+F+YFXFY
