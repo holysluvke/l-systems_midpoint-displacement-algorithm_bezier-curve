@@ -3,24 +3,22 @@ import tkinter as tk
 from tkinter import ttk
 
 
-def build_levels(y_left, y_right, amp, r, n_steps, seed, gauss):
+def build_levels(y_left, y_right, amp, r, n_steps, seed):
+    rng = random.Random(seed)
     pts = [(0.0, y_left), (1.0, y_right)]
     levels = [pts]
-    for step in range(1, n_steps + 1):
-        rng = random.Random(seed * 7919 + step)
-        scale = amp * (r ** (step - 1))
+    scale = amp
+    for _ in range(1, n_steps + 1):
         new = [pts[0]]
         for a, b in zip(pts, pts[1:]):
             mx = (a[0] + b[0]) / 2
             my = (a[1] + b[1]) / 2
-            if gauss:
-                d = rng.gauss(0, scale / 2)
-            else:
-                d = rng.uniform(-scale, scale)
+            d = rng.uniform(-scale, scale)
             new.append((mx, my + d))
             new.append(b)
         pts = new
         levels.append(pts)
+        scale *= r
     return levels
 
 
@@ -37,7 +35,6 @@ class MidpointFrame(ttk.Frame):
         self.v_amp = tk.StringVar(value="0.5")
         self.v_r = tk.DoubleVar(value=0.55)
         self.v_seed = tk.StringVar(value="1")
-        self.v_gauss = tk.BooleanVar(value=False)
         self.v_all = tk.BooleanVar(value=True)
         self.v_fill = tk.BooleanVar(value=True)
         self.v_points = tk.BooleanVar(value=False)
@@ -99,16 +96,10 @@ class MidpointFrame(ttk.Frame):
 
         ttk.Checkbutton(
             panel,
-            text="Гауссово распределение смещения",
-            variable=self.v_gauss,
-            command=self.on_params,
-        ).pack(anchor="w", pady=(8, 0))
-        ttk.Checkbutton(
-            panel,
             text="Показывать предыдущие шаги",
             variable=self.v_all,
             command=self.redraw,
-        ).pack(anchor="w")
+        ).pack(anchor="w", pady=(8, 0))
         ttk.Checkbutton(
             panel, text="Заливка под ломаной", variable=self.v_fill, command=self.redraw
         ).pack(anchor="w")
@@ -167,7 +158,7 @@ class MidpointFrame(ttk.Frame):
         r = self.v_r.get()
 
         self.n_steps = n
-        self.levels = build_levels(y0, y1, amp, r, n, seed, self.v_gauss.get())
+        self.levels = build_levels(y0, y1, amp, r, n, seed)
         self.step = min(self.step, n)
         self.lbl_r.config(text=f"r = {r:.2f}  (меньше - глаже, ближе к 1 - острее)")
         self.redraw()
