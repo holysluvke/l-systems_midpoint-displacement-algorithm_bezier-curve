@@ -9,18 +9,8 @@ import tkinter as tk
 from tkinter import ttk
 
 from midpoint_app import MidpointFrame
-
 from lsystem_app import LSystemFrame
-
-
-def stub(parent: ttk.Notebook, text: str) -> ttk.Frame:
-    """Заглушка для ещё не реализованного задания."""
-    frame = ttk.Frame(parent)
-    ttk.Label(frame, text=text, foreground="gray", font=("Segoe UI", 12)).pack(
-        expand=True
-    )
-    return frame
-
+from bezier_app import BezierFrame
 
 def main():
     root = tk.Tk()
@@ -33,13 +23,7 @@ def main():
 
     notebook.add(LSystemFrame(notebook), text="1. L-системы")
     notebook.add(MidpointFrame(notebook), text="2. Midpoint displacement")
-    notebook.add(
-        stub(
-            notebook,
-            "Задание 3: составные кубические кривые Безье - ещё не реализовано",
-        ),
-        text="3. Кривые Безье",
-    )
+    notebook.add(BezierFrame(notebook), text="3. Кривые Безье")
 
     root.mainloop()
 
